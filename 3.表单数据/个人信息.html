@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            #message {
+                width: 500px;
+                margin: 10px auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border: 1px solid #000;
+                border-radius: 10px;
+
+                & h1 {
+                    text-align: center;
+                    margin: 10px;
+                }
+
+                & form {
+                    width: 100%;
+
+                    & .tab1 {
+                        width: inherit;
+                        height: 550px;
+                        margin: 20px auto;
+
+                        & th {
+                            text-align: right;
+                        }
+
+                        & td {
+                            position: relative;
+                            left: 20px;
+                        }
+                    }
+
+                    & .tab2 {
+                        margin: 0 auto;
+
+                        td {
+                            text-align: center;
+                            padding: 20px;
+                        }
+                    }
+
+                    & .but {
+                        position: relative;
+                        bottom: 0;
+                        left: 40%;
+                        width: 100px;
+                        height: 30px;
+                        margin-top: 10px;
+                    }
+                }
+
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="message">
+            <h1>{{titile}}</h1>
+            <form>
+                <table class="tab1" v-if="bool">
+                    <tr>
+                        <th>姓名</th>
+                        <td><input type="text" name="name" id="name" v-model="formData.name" placeholder="姓名"></td>
+                    </tr>
+                    <tr>
+                        <th>年龄</th>
+                        <td><input type="text" name="age" id="age" v-model="formData.age" placeholder="年龄"></td>
+                    </tr>
+                    <tr>
+                        <th>性别</th>
+                        <td>
+                            <label>
+                                <input type="radio" name="sex" value="男" v-model="formData.sex">男
+                            </label>
+                            <label>
+                                <input type="radio" name="sex" value="女" v-model="formData.sex">女
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>婚姻状态</th>
+                        <td>
+                            <label>
+                                <input type="radio" name="matrimony" value="已婚" v-model="formData.matrimony">已婚
+                            </label>
+                            <label>
+                                <input type="radio" name="matrimony" value="未婚" v-model="formData.matrimony">未婚
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>爱好</th>
+                        <td>
+                            <label v-for="item in loveList" :key="item">
+                                <input type="checkbox" name="love" :value="item" v-model="formData.love">{{item}}
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            旅游地
+                        </th>
+                        <td>
+                            <select name="travel" v-model="formData.travel">
+                                <option :value="item" v-for="item in selectList" :key="item">{{item}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>颜色</th>
+                        <td>
+                            <input type="color" name="color" v-model="formData.color">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>自我介绍</th>
+                        <td>
+                            <textarea name="introduce" cols="30" rows="2" v-model="formData.my"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>出生日期</th>
+                        <td>
+                            <input type="date" name="data" v-model="formData.data">
+                        </td>
+                    </tr>
+                </table>
+                <table class="tab2" border="1" style="border-collapse: collapse;" v-else="">
+                    <tr>
+                        <td>姓名</td>
+                        <td>{{formData.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>年龄</td>
+                        <td>{{formData.age}}</td>
+                    </tr>
+                    <tr>
+                        <td>性别</td>
+                        <td>{{formData.sex}}</td>
+                    </tr>
+                    <tr>
+                        <td>婚姻状态</td>
+                        <td>{{formData.matrimony}}</td>
+                    </tr>
+                    <tr>
+                        <td>爱好</td>
+                        <td>{{formData.love.length===0?'无':formData.love.toString()}}</td>
+                    </tr>
+                    <tr>
+                        <td>旅游地</td>
+                        <td>{{formData.travel||'睡觉'}}</td>
+                    </tr>
+                    <tr>
+                        <td>颜色</td>
+                        <td>{{formData.color||'选择颜色'}}</td>
+                    </tr>
+                    <tr>
+                        <td>自我介绍</td>
+                        <td>{{formData.my||'暂无自我介绍'}}</td>
+                    </tr>
+                    <tr>
+                        <td>出生日期</td>
+                        <td>{{formData.data||'确认时间'}}</td>
+                    </tr>
+                </table>
+                <input type="button" @click="onSubmit" value="提交" class="but">
+            </form>
+        </div>
+        <script src="vue.js"></script>
+        <script>
+            new Vue({
+                el: '#message',
+                data() {
+                    return {
+                        bool: true,
+                        titile: '个人信息',
+                        loveList: ['篮球', '跑步', '足球', '代码', '游戏'],
+                        selectList: ['海南', '新加坡', '法国', '成都', '长沙'],
+                        formData: {
+                            love: [],
+                            sex: '男',
+                            matrimony: '未婚',
+                            color: '#000000'
+                        }
+                    }
+                },
+                methods: {
+                    onSubmit() {
+                        if (this.formData.name && this.formData.age) {
+                            this.bool = false;
+                            this.titile = '您的信息';
+                        } else {
+                            return alert('请输入姓名或年龄！');
+                        }
+                    }
+                }
+            })
+        </script>
+    </body>
+
+</html>
