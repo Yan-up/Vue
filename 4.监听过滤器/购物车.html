@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                user-select: none;
+            }
+
+            #box {
+                width: 90vw;
+                margin: 50px auto;
+                border: 1px solid #000;
+
+                & .head-box {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    box-sizing: border-box;
+                    padding: 5px 40px;
+                    border-bottom: 1px solid #000;
+
+                    & p>button {
+                        width: 50px;
+                        height: 25px;
+                        line-height: 25px;
+                        margin-left: 10px;
+                        background-color: #fff;
+                        display: inline-block;
+                        text-align: center;
+                        cursor: pointer;
+                        border: 1px solid #CCC;
+                    }
+                }
+
+                & ul {
+                    width: 100%;
+                    margin: 10px auto;
+                    list-style: none;
+                    padding: 0 20px;
+                    box-sizing: border-box;
+
+                    & li {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin: 10px 0;
+                        box-sizing: border-box;
+                        padding: 0 10px;
+
+                        &:nth-child(n+2) {
+                            height: 100px;
+                            background-color: #eee;
+                            border-radius: 10px;
+                        }
+
+                        & label {
+                            width: 55px;
+                            display: flex;
+                            justify-content: space-between;
+                        }
+
+                        &.product {
+                            width: 100%;
+                        }
+
+                        & .details {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            justify-content: center;
+
+                            img {
+                                object-fit: cover;
+                            }
+
+                            p {
+                                width: 150px;
+                                font-size: 10px;
+                                margin-left: 10px;
+                            }
+                        }
+
+                        & .quantity {
+                            display: flex;
+                            transform: translateX(-35px);
+
+                            & input[type=button] {
+                                width: 15px;
+                                outline: none;
+                            }
+
+                            & input[type=text] {
+                                width: 25px;
+                                text-align: center;
+                                outline: none;
+                            }
+                        }
+
+                        & .del {
+                            font-size: 16px;
+                            font-weight: bold;
+                            text-decoration: none;
+                            color: #000;
+                        }
+
+                    }
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="box">
+            <div class="head-box">
+                <h2>购物车</h2>
+                <p>
+                    已选商品{{totalCount}}件 (不含运费):￥{{totalPrice}}
+                    <button>结算</button>
+                </p>
+            </div>
+            <ul>
+                <li>
+                    <label>
+                        <input type="checkbox" name="checkbox" v-model="allCheck">全选
+                    </label>
+                    <p>商品信息</p>
+                    <p>单价</p>
+                    <p>数量</p>
+                    <p>金额</p>
+                    <p>操作</p>
+                </li>
+                <li class="product" v-for="item in list" :key="item.id">
+                    <input type="checkbox" name="checkbox" :value="item.id" v-model="checkList">
+                    <div class="details">
+                        <img :src="item.img" alt="">
+                        <p>{{item.name}}</p>
+                    </div>
+                    <p style="transform: translateX(-50px);">￥{{item.price}}</p>
+                    <div class="quantity">
+                        <input type="button" name="button" value="-" @click="item.num===1||item.num--">
+                        <input type="text" name="text" :value="item.num" class="num" disabled="disabled">
+                        <input type="button" name="button" value="+" @click="item.num++">
+                    </div>
+                    <p style="transform: translateX(-20px);">{{item.num*item.price|formatPrice}}</p>
+                    <a href="javascript:;" class="del" @click="onClick(item.id)">删除</a>
+                </li>
+            </ul>
+        </div>
+
+        <script src="vue.js"></script>
+        <script>
+            new Vue({
+                el: '#box',
+                data() {
+                    return {
+                        checkList: [],
+                        list: [
+                            {
+                                id: 1,
+                                img: './image/da651890804ab802.jpg',
+                                name: 'Apple/苹果iPadPro13英寸M4芯片2024年新款平板电脑(512G WLAN版/MVX43CH/A)深空黑色',
+                                price: '13199.00',
+                                num: 1,
+                                isCheck: true
+                            },
+                            {
+                                id: 2,
+                                img: './image/b4182f1e909d2466.jpg',
+                                name: 'Apple/苹果 iPhone 15 Plus (A3096) 128GB',
+                                price: '5999.00',
+                                num: 1,
+                            },
+                            {
+                                id: 3,
+                                img: './image/b4bbf605a9d10ce5.jpg',
+                                name: 'Apple/苹果 iPhone 15 Pro (A3104) 256GB 黑色钛金属',
+                                price: '7979.00',
+                                num: 1,
+                            },
+                            {
+                                id: 4,
+                                img: './image/7689e83da072b6b1.jpg',
+                                name: 'Apple/苹果 iPhone 14 (A2884) 256GB 午夜色',
+                                price: '5699.00',
+                                num: 1,
+                            },
+                            {
+                                id: 5,
+                                img: './image/f03ae8fd3e0e3570.jpg',
+                                name: 'Apple/苹果 iPhone 15 Pro Max (A3108) 256GB 黑色钛金属',
+                                price: '8349.00',
+                                num: 1,
+                            }
+                        ]
+                    }
+                },
+                computed: {
+                    allCheck: {// 全选功能
+                        get() {//判断是否全选
+                            return this.checkList.length === 0 ? false : this.checkList.length === this.list.length;
+                        },
+                        set(value) {
+                            // if (value) {
+                            //     this.checkList = this.list.map(item => item.id)
+                            // } else {
+                            //     this.checkList = []
+                            // }
+                            console.log(value);
+                            this.checkList = value ? this.list.map(item => item.id) : [];
+                        }
+                    },
+                    totalCount() {
+                        // return this.list.reduce((total, item) => {
+                        //     if (this.checkList.includes(item.id)) {
+                        //         return total + item.num;
+                        //     } else {
+                        //         return total;
+                        //     }
+                        // }, 0)
+
+                        return this.list.reduce((total, item) => this.checkList.includes(item.id) ? total + item.num : total, 0)
+                    },
+                    totalPrice() {
+                        // return this.list.reduce((total, item) => {
+                        //     if (this.checkList.includes(item.id)) {
+                        //         return total + item.price * item.num;
+                        //     } else {
+                        //         return total;
+                        //     }
+                        // }, 0)
+                        return this.list.reduce((total, item) => this.checkList.includes(item.id) ? total + item.price * item.num : total, 0)
+                    }
+                },
+                filters: {
+                    formatPrice(value) {// 过滤器,保留小数点后两
+                        return '￥' + value.toFixed(2);
+                    }
+                },
+                methods: {
+                    onClick(id) {//删除
+                        this.list = this.list.filter(item => item.id !== id);
+                        let index = this.checkList.indexOf(id);
+                        if (index >= 0) {
+                            this.checkList.splice(index, 1);
+                        }
+                    }
+                }
+            })
+        </script>
+    </body>
+
+</html>
